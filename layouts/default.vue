@@ -34,6 +34,7 @@
     </client-only>
   </v-app>
 </template>
+
 <script setup lang="ts">
   import { useDisplay } from 'vuetify/lib/framework.mjs'
 

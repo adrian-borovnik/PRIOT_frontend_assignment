@@ -8,5 +8,10 @@ export const useContextStore = defineStore('context', () => {
     pokemons.value = [...pokemons.value, newPokemon]
   }
 
-  return { pokemons, addPokemon, pokemonNum }
+  const removePokemon = (id: number) => {
+    const temp = pokemons.value.filter((p) => p.id !== id)
+    pokemons.value = temp
+  }
+
+  return { pokemons, addPokemon, removePokemon, pokemonNum }
 })

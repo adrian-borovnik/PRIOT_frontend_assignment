@@ -17,6 +17,7 @@ type PokemonResponse = {
 }
 
 type PokemonModel = {
+  id: number
   name: string
   stats: {
     hp: number
