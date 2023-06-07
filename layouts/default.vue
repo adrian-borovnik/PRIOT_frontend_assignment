@@ -38,6 +38,8 @@
 <script setup lang="ts">
   import { useDisplay } from 'vuetify/lib/framework.mjs'
 
+  // Todo local storage
+
   const { mobile } = useDisplay()
   const drawer = ref(false)
 
