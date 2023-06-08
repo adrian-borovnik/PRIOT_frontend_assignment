@@ -77,6 +77,10 @@
   import { useContextStore } from '../store/index'
 
   const store = useContextStore()
+
+  const pokemonsLocal = localStorage.getItem('pokemons') || '[]'
+  store.pokemons = JSON.parse(pokemonsLocal)
+
   const fetchError = ref(false)
   const loading = ref(false)
 

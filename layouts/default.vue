@@ -39,6 +39,8 @@
   import { useDisplay } from 'vuetify/lib/framework.mjs'
 
   // Todo local storage
+  import { useContextStore } from '../store/index'
+  const store = useContextStore()
 
   const { mobile } = useDisplay()
   const drawer = ref(false)

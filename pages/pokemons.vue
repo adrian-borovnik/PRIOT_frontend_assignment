@@ -43,6 +43,9 @@
 
   const store = useContextStore()
 
+  const pokemonsLocal = localStorage.getItem('pokemons') || '[]'
+  store.pokemons = JSON.parse(pokemonsLocal)
+
   const handleAddPokemon = () => {
     const pokemon: PokemonModel = {
       id: Math.floor(Math.random() * 999999999), // idealy would be using uuid
