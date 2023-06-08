@@ -2,29 +2,49 @@
   <h1>Hello world</h1>
   <p>You have {{ store.pokemonNum }} pokemon</p>
 
-  <v-btn @click="fetchData">FETCH</v-btn>
-  <v-btn @click="handleKeep">KEEP</v-btn>
   <!-- <code>{{ pokemon }}</code> -->
 
-  <v-sheet class="d-flex justify-center">
-    <p v-if="loading">Searching pokemon...</p>
-    <p v-if="fetchError && !loading">There was an error</p>
-    <v-card class="d-flex" v-if="!fetchError && !loading">
-      <img
-        :src="pokemon.sprites.front_default"
-        alt="Image of a pokemon"
-        width="256"
-        height="256"
-      />
-      <v-sheet>
-        <p>{{ pokemon.name }}</p>
+  <p v-if="fetchError && !loading">There was an error</p>
+
+  <v-container fluid class="d-flex justify-center">
+    <v-sheet width="100%" max-width="600">
+      <v-card class="d-flex pa-4" v-if="!fetchError">
+        <v-img
+          :src="pokemon.sprites.front_default"
+          alt="Image of a pokemon"
+          aspect-ratio="1"
+          max-width="200"
+        />
+        <v-divider vertical class="mx-4"></v-divider>
+        <v-sheet>
+          <p>
+            {{
+              pokemon.name.toUpperCase()[0] +
+              pokemon.name.replace('-', ' ').substring(1)
+            }}
+          </p>
+          <p>
+            {{ pokemon.name }}
+          </p>
+        </v-sheet>
+      </v-card>
+      <v-sheet class="d-flex justify-end pt-4">
+        <v-btn
+          @click="handleKeep"
+          color="green"
+          prepend-icon="mdi-pokeball"
+          class="mr-2"
+          >CATCH</v-btn
+        >
+        <v-btn @click="fetchData" color="blue" prepend-icon="mdi-magnify"
+          >SEARCH</v-btn
+        >
       </v-sheet>
-    </v-card>
-  </v-sheet>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script setup lang="ts">
-  import { b } from 'consola/dist/consola-3fef035a'
   import { useContextStore } from '../store/index'
 
   const store = useContextStore()
@@ -34,9 +54,8 @@
   const pokemon = ref({} as PokemonResponse)
 
   const fetchData = async () => {
+    loading.value = true
     try {
-      loading.value = true
-
       const id = Math.floor(Math.random() * 1000)
       const uri = `https://pokeapi.co/api/v2/pokemon/${id}`
       const res = await fetch(uri)
