@@ -1,9 +1,4 @@
 <template>
-  <h1>Hello world</h1>
-  <p>You have {{ store.pokemonNum }} pokemon</p>
-
-  <!-- <code>{{ pokemon }}</code> -->
-
   <p v-if="fetchError && !loading">There was an error</p>
 
   <v-container fluid class="d-flex justify-center">
@@ -17,12 +12,12 @@
         />
         <v-divider vertical class="mx-4"></v-divider>
         <v-sheet>
-          <span>
+          <p class="text-h5 mb-6">
             {{
               pokemon.name.toUpperCase()[0] +
               pokemon.name.replace('-', ' ').substring(1)
             }}
-          </span>
+          </p>
           <!-- <v-list disabled>
             <v-list-item>
               <template v-slot:prepend>
@@ -64,6 +59,17 @@
         >
       </v-sheet>
     </v-sheet>
+
+    <v-snackbar
+      v-model="showSnackbar"
+      :timeout="snackbarTimeout"
+      rounded="pill"
+      color="success"
+      class="text-center"
+    >
+      <v-icon class="mr-2">mdi-check</v-icon>
+      You successfully catch {{ catchedPokemon }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -73,6 +79,10 @@
   const store = useContextStore()
   const fetchError = ref(false)
   const loading = ref(false)
+
+  const showSnackbar = ref(false)
+  const snackbarTimeout = ref(1500)
+  const catchedPokemon = ref('')
 
   const pokemon = ref({} as PokemonModel)
 
@@ -103,7 +113,6 @@
       }
 
       pokemon.value = pokemonData
-      console.log(pokemonData)
     } catch (e) {
       loading.value = false
       fetchError.value = true
@@ -130,20 +139,14 @@
   await fetchData()
 
   const handleKeep = async () => {
-    // const tempPokemon: PokemonModel = {
-    //   id: Math.floor(Math.random() * 999999999), // idealy would be using uuid
-    //   name: pokemon.value.name,
-    //   stats: {
-    //     hp: pokemon.value.stats[0].base_stat,
-    //     attack: pokemon.value.stats[1].base_stat,
-    //     defense: pokemon.value.stats[2].base_stat,
-    //     speed: pokemon.value.stats[3].base_stat,
-    //   },
-    //   mainAbility: pokemon.value.abilities[0].ability.name,
-    //   img: pokemon.value.sprites.front_default,
-    // }
-
     if (pokemon.value) store.addPokemon(pokemon.value)
+
+    catchedPokemon.value =
+      pokemon.value.name.toUpperCase()[0] +
+      pokemon.value.name.replace('-', ' ').substring(1)
+
+    showSnackbar.value = true
+
     await fetchData()
   }
 </script>
