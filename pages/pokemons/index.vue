@@ -1,7 +1,7 @@
 <template>
   <!-- TEMPLATE CODE GOES HERE -->
 
-  <button @click="handleAddPokemon">Add Pokemon</button>
+  <v-btn @click="handleAddPokemon">Add Ditto</v-btn>
 
   <div>You catched {{ store.pokemonNum }} pokemons</div>
 
@@ -10,12 +10,14 @@
       <!-- <PokemonCard :pokemon="p" @remove="handleRemovePokemon(p.id)" /> -->
 
       <v-card class="pa-4 d-flex flex-column align-center">
-        <v-img
-          :src="p.img"
-          :alt="`Picture of ${p.name}`"
-          width="200"
-          aspect-ratio="1"
-        />
+        <NuxtLink :to="`/pokemons/${p.name}`">
+          <v-img
+            :src="p.img"
+            :alt="`Picture of ${p.name}`"
+            width="200"
+            aspect-ratio="1"
+          />
+        </NuxtLink>
 
         <v-sheet class="d-flex align-center" width="100%">
           <p>
@@ -39,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useContextStore } from '../store/index'
+  import { useContextStore } from '../../store/index'
 
   const store = useContextStore()
 
@@ -49,7 +51,7 @@
   const handleAddPokemon = () => {
     const pokemon: PokemonModel = {
       id: Math.floor(Math.random() * 999999999), // idealy would be using uuid
-      name: 'Ditto',
+      name: 'ditto',
       stats: {
         hp: 48,
         attack: 48,

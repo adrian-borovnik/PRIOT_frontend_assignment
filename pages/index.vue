@@ -18,16 +18,6 @@
               pokemon.name.replace('-', ' ').substring(1)
             }}
           </p>
-          <!-- <v-list disabled>
-            <v-list-item>
-              <template v-slot:prepend>
-                <v-icon icon="mdi-heart" color="green"> </v-icon>
-              </template>
-              <v-list-item-title
-                >Health points: {{ pokemon.stats.hp }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list> -->
           <div class="d-flex mt-2">
             <v-icon icon="mdi-heart" color="green mr-2"> </v-icon>
             <p>Health points: {{ pokemon.stats.hp }}</p>

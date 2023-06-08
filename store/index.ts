@@ -5,7 +5,7 @@ export const useContextStore = defineStore('context', () => {
   const pokemonNum = computed(() => pokemons.value.length)
 
   const addPokemon = (newPokemon: PokemonModel) => {
-    pokemons.value = [...pokemons.value, newPokemon]
+    pokemons.value = [newPokemon, ...pokemons.value]
     localStorage.setItem('pokemons', JSON.stringify(pokemons.value))
   }
 
