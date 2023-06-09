@@ -1,12 +1,17 @@
 <template>
   <v-card class="pa-4 d-flex flex-column align-center">
     <NuxtLink :to="`/pokemons/${pokemon.name}`">
-      <v-img
-        :src="pokemon.img"
-        :alt="`Picture of ${pokemon.name}`"
-        width="200"
-        aspect-ratio="1"
-      />
+      <v-tooltip text="Click for more details" location="top">
+        <template v-slot:activator="{ props }">
+          <v-img
+            v-bind="props"
+            :src="pokemon.img"
+            :alt="`Picture of ${pokemon.name}`"
+            width="200"
+            aspect-ratio="1"
+          />
+        </template>
+      </v-tooltip>
     </NuxtLink>
 
     <v-sheet class="d-flex align-center text-h6" width="100%">

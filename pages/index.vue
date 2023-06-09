@@ -17,40 +17,40 @@
         >
       </v-sheet>
     </v-sheet>
-
-    <v-snackbar
-      v-model="showSnackbarSuccess"
-      :timeout="snackbarTimeout"
-      rounded="pill"
-      color="success"
-      class="text-center"
-    >
-      <v-icon class="mr-2">mdi-check</v-icon>
-      You successfully caught {{ catchedPokemon }}
-    </v-snackbar>
-
-    <v-snackbar
-      v-model="showSnackbarWarning"
-      :timeout="snackbarTimeout"
-      rounded="pill"
-      color="warning"
-      class="text-center"
-    >
-      <v-icon class="mr-2">mdi-check</v-icon>
-      {{ catchedPokemon }} escaped the pokeball. Try again!
-    </v-snackbar>
-
-    <v-snackbar
-      v-model="showSnackbarError"
-      :timeout="snackbarTimeout"
-      rounded="pill"
-      color="error"
-      class="text-center"
-    >
-      <v-icon class="mr-2">mdi-check</v-icon>
-      {{ catchedPokemon }} ran away...
-    </v-snackbar>
   </v-container>
+
+  <v-snackbar
+    v-model="showSnackbarSuccess"
+    :timeout="snackbarTimeout"
+    rounded="pill"
+    color="success"
+    class="text-center"
+  >
+    <v-icon class="mr-2">mdi-check-circle</v-icon>
+    You successfully caught {{ catchedPokemon }}
+  </v-snackbar>
+
+  <v-snackbar
+    v-model="showSnackbarWarning"
+    :timeout="snackbarTimeout"
+    rounded="pill"
+    color="warning"
+    class="text-center"
+  >
+    <v-icon class="mr-2">mdi-alert</v-icon>
+    {{ catchedPokemon }} escaped the pokeball. Try again!
+  </v-snackbar>
+
+  <v-snackbar
+    v-model="showSnackbarError"
+    :timeout="snackbarTimeout"
+    rounded="pill"
+    color="red"
+    class="text-center"
+  >
+    <v-icon class="mr-2">mdi-close-octagon-outline</v-icon>
+    {{ catchedPokemon }} ran away...
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">
