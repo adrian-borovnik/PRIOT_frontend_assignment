@@ -1,9 +1,21 @@
 <template>
   <!-- TEMPLATE CODE GOES HERE -->
 
-  <v-btn @click="handleAddPokemon">Add Ditto</v-btn>
+  <v-tooltip text="Ditto">
+    <template v-slot:activator="{ props }">
+      <v-btn
+        fab
+        color="purple"
+        icon="mdi-magic-staff"
+        v-bind="props"
+        @click="handleAddPokemon"
+      ></v-btn>
+    </template>
+  </v-tooltip>
 
-  <div>You catched {{ store.pokemonNum }} pokemons</div>
+  <p class="text-center pa-4 text-h5">
+    You caught {{ store.pokemonNum }} pokemons
+  </p>
 
   <v-row>
     <v-col cols="3" v-for="p in store.pokemons">

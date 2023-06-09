@@ -6,7 +6,7 @@
       <PokemonSearchCard :pokemon="pokemon" v-if="!fetchError" />
       <v-sheet class="d-flex justify-end pt-4">
         <v-btn
-          @click="handleKeep"
+          @click="handleCatch"
           color="green"
           prepend-icon="mdi-pokeball"
           class="mr-2"
@@ -81,16 +81,26 @@
     }
   }
 
-  const handleKeep = async () => {
-    if (pokemon.value) store.addPokemon(pokemon.value)
+  const handleCatch = async () => {
+    const chance = Math.random()
+    const catchThreshold = 0.4
+    const runawayThreshold = 0.8
 
-    catchedPokemon.value =
-      pokemon.value.name.toUpperCase()[0] +
-      pokemon.value.name.replace('-', ' ').substring(1)
+    if (chance < catchThreshold) {
+      store.addPokemon(pokemon.value)
 
-    showSnackbar.value = true
+      catchedPokemon.value =
+        pokemon.value.name.toUpperCase()[0] +
+        pokemon.value.name.replace('-', ' ').substring(1)
 
-    await fetchData()
+      showSnackbar.value = true
+
+      await fetchData()
+    } else if (chance >= runawayThreshold) {
+      await fetchData()
+    } else {
+      // Try again
+    }
   }
 
   await fetchData()

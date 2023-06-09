@@ -9,7 +9,7 @@
       />
     </NuxtLink>
 
-    <v-sheet class="d-flex align-center" width="100%">
+    <v-sheet class="d-flex align-center text-h6" width="100%">
       <p>
         {{
           pokemon.name.toUpperCase()[0] +
@@ -17,12 +17,23 @@
         }}
       </p>
       <v-spacer></v-spacer>
-      <v-btn
-        color="red"
-        fab
-        icon="mdi-delete"
-        @click="handleRemovePokemon(pokemon.id)"
-      ></v-btn>
+      <v-tooltip
+        :text="`Delete ${
+          pokemon.name.toUpperCase()[0] +
+          pokemon.name.replace('-', ' ').substring(1)
+        }`"
+        location="top"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn
+            color="red"
+            fab
+            icon="mdi-delete"
+            v-bind="props"
+            @click="handleRemovePokemon(pokemon.id)"
+          ></v-btn>
+        </template>
+      </v-tooltip>
     </v-sheet>
   </v-card>
 </template>

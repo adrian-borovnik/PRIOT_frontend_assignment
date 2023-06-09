@@ -1,4 +1,7 @@
 <template>
+  <NuxtLink to="/pokemons">
+    <v-btn flat prepend-icon="mdi-arrow-left" class="mb-4">Go back</v-btn>
+  </NuxtLink>
   <PokemonDetails :pokemon="pokemon" v-if="!error && !pending" />
   <div v-if="!pending && error">
     <p>
