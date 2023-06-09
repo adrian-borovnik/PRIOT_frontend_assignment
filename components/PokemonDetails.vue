@@ -1,7 +1,5 @@
 <template>
-  <PokemonDetails :pokemon="pokemon" />
-
-  <!-- <v-card class="pa-8" v-if="!pending">
+  <v-card class="pa-8">
     <p class="text-h3 mb-8">
       {{
         pokemon.name.toUpperCase()[0] +
@@ -69,21 +67,9 @@
         </div>
       </v-sheet>
     </v-sheet>
-  </v-card> -->
-
-  <!-- <code>{{ pokemon }}</code> -->
+  </v-card>
 </template>
 
 <script setup lang="ts">
-  const { name: param } = useRoute().params
-  const name = ref(param as string)
-
-  const uri = `https://pokeapi.co/api/v2/pokemon/${name.value}`
-
-  const {
-    data: pokemon,
-    pending,
-    error,
-  }: any = await useFetch(uri, { key: name.value })
-  console.log(pokemon)
+  const { pokemon } = defineProps(['pokemon'])
 </script>

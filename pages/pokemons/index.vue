@@ -7,35 +7,7 @@
 
   <v-row>
     <v-col cols="3" v-for="p in store.pokemons">
-      <!-- <PokemonCard :pokemon="p" @remove="handleRemovePokemon(p.id)" /> -->
-
-      <v-card class="pa-4 d-flex flex-column align-center">
-        <NuxtLink :to="`/pokemons/${p.name}`">
-          <v-img
-            :src="p.img"
-            :alt="`Picture of ${p.name}`"
-            width="200"
-            aspect-ratio="1"
-          />
-        </NuxtLink>
-
-        <v-sheet class="d-flex align-center" width="100%">
-          <p>
-            {{
-              p.name.toUpperCase()[0] + p.name.replace('-', ' ').substring(1)
-            }}
-          </p>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="red"
-            fab
-            icon="mdi-delete"
-            @click="handleRemovePokemon(p.id)"
-          ></v-btn>
-        </v-sheet>
-      </v-card>
-
-      <!--  -->
+      <PokemonCard :pokemon="p" />
     </v-col>
   </v-row>
 </template>
@@ -50,7 +22,7 @@
 
   const handleAddPokemon = () => {
     const pokemon: PokemonModel = {
-      id: Math.floor(Math.random() * 999999999), // idealy would be using uuid
+      id: Math.floor(Math.random() * 999999999),
       name: 'ditto',
       stats: {
         hp: 48,
@@ -63,10 +35,5 @@
     }
 
     store.addPokemon(pokemon)
-  }
-
-  // TODO update the UI on delete
-  const handleRemovePokemon = (id: number) => {
-    store.removePokemon(id)
   }
 </script>
