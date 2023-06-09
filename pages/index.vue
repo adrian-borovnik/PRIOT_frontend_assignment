@@ -19,14 +19,36 @@
     </v-sheet>
 
     <v-snackbar
-      v-model="showSnackbar"
+      v-model="showSnackbarSuccess"
       :timeout="snackbarTimeout"
       rounded="pill"
       color="success"
       class="text-center"
     >
       <v-icon class="mr-2">mdi-check</v-icon>
-      You successfully catch {{ catchedPokemon }}
+      You successfully caught {{ catchedPokemon }}
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="showSnackbarWarning"
+      :timeout="snackbarTimeout"
+      rounded="pill"
+      color="warning"
+      class="text-center"
+    >
+      <v-icon class="mr-2">mdi-check</v-icon>
+      {{ catchedPokemon }} escaped the pokeball. Try again!
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="showSnackbarError"
+      :timeout="snackbarTimeout"
+      rounded="pill"
+      color="error"
+      class="text-center"
+    >
+      <v-icon class="mr-2">mdi-check</v-icon>
+      {{ catchedPokemon }} ran away...
     </v-snackbar>
   </v-container>
 </template>
@@ -42,8 +64,10 @@
   const fetchError = ref(false)
   const loading = ref(false)
 
-  const showSnackbar = ref(false)
-  const snackbarTimeout = ref(1500)
+  const showSnackbarSuccess = ref(false)
+  const showSnackbarWarning = ref(false)
+  const showSnackbarError = ref(false)
+  const snackbarTimeout = ref(2000)
   const catchedPokemon = ref('')
 
   const pokemon = ref({} as PokemonModel)
@@ -86,20 +110,21 @@
     const catchThreshold = 0.4
     const runawayThreshold = 0.8
 
+    catchedPokemon.value =
+      pokemon.value.name.toUpperCase()[0] +
+      pokemon.value.name.replace('-', ' ').substring(1)
+
     if (chance < catchThreshold) {
       store.addPokemon(pokemon.value)
-
-      catchedPokemon.value =
-        pokemon.value.name.toUpperCase()[0] +
-        pokemon.value.name.replace('-', ' ').substring(1)
-
-      showSnackbar.value = true
+      showSnackbarSuccess.value = true
 
       await fetchData()
     } else if (chance >= runawayThreshold) {
+      showSnackbarError.value = true
       await fetchData()
     } else {
       // Try again
+      showSnackbarWarning.value = true
     }
   }
 
