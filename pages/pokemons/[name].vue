@@ -1,6 +1,6 @@
 <template>
   <PokemonDetails :pokemon="pokemon" v-if="!error && !pending" />
-  <div v-else>
+  <div v-if="!pending && error">
     <p>
       {{ name.toUpperCase()[0] + name.replace('-', ' ').substring(1) }} was not
       found...
