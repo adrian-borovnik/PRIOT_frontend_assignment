@@ -8,7 +8,7 @@
     </p>
 
     <v-row class="d-flex justify-center">
-      <v-col class="d-flex" cols="4">
+      <v-col>
         <v-img
           :src="pokemon.sprites.front_default"
           alt="Image of a pokemon"
@@ -17,6 +17,7 @@
           class="mr-4"
         />
         <v-img
+          v-if="pokemon.sprites.back_default"
           :src="pokemon.sprites.back_default"
           alt="Image of a pokemon"
           aspect-ratio="1"

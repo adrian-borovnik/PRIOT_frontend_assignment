@@ -1,5 +1,5 @@
 <template>
-  <p v-if="fetchError && !loading">There was an error</p>
+  <p v-if="fetchError && !loading">There was an error, search again...</p>
 
   <v-container fluid class="d-flex justify-center">
     <v-sheet width="100%" max-width="600">
@@ -27,7 +27,7 @@
     class="text-center"
   >
     <v-icon class="mr-2">mdi-check-circle</v-icon>
-    You successfully caught {{ catchedPokemon }}
+    You successfully caught {{ currentPokemon }}
   </v-snackbar>
 
   <v-snackbar
@@ -38,7 +38,7 @@
     class="text-center"
   >
     <v-icon class="mr-2">mdi-alert</v-icon>
-    {{ catchedPokemon }} escaped the pokeball. Try again!
+    {{ currentPokemon }} escaped the pokeball. Try again!
   </v-snackbar>
 
   <v-snackbar
@@ -49,7 +49,7 @@
     class="text-center"
   >
     <v-icon class="mr-2">mdi-close-octagon-outline</v-icon>
-    {{ catchedPokemon }} ran away...
+    {{ currentPokemon }} ran away...
   </v-snackbar>
 </template>
 
@@ -58,8 +58,8 @@
 
   const store = useContextStore()
 
-  const pokemonsLocal = localStorage.getItem('pokemons') || '[]'
-  store.pokemons = JSON.parse(pokemonsLocal)
+  const pokemonsLocalStorage = localStorage.getItem('pokemons') || '[]'
+  store.pokemons = JSON.parse(pokemonsLocalStorage)
 
   const fetchError = ref(false)
   const loading = ref(false)
@@ -68,7 +68,7 @@
   const showSnackbarWarning = ref(false)
   const showSnackbarError = ref(false)
   const snackbarTimeout = ref(2000)
-  const catchedPokemon = ref('')
+  const currentPokemon = ref('')
 
   const pokemon = ref({} as PokemonModel)
 
@@ -82,8 +82,6 @@
 
       loading.value = false
       fetchError.value = false
-
-      console.log(rawData)
 
       const pokemonData: PokemonModel = {
         id: Math.floor(Math.random() * 999999999),
@@ -110,20 +108,18 @@
     const catchThreshold = 0.4
     const runawayThreshold = 0.8
 
-    catchedPokemon.value =
+    currentPokemon.value =
       pokemon.value.name.toUpperCase()[0] +
       pokemon.value.name.replace('-', ' ').substring(1)
 
     if (chance < catchThreshold) {
       store.addPokemon(pokemon.value)
       showSnackbarSuccess.value = true
-
       await fetchData()
     } else if (chance >= runawayThreshold) {
       showSnackbarError.value = true
       await fetchData()
     } else {
-      // Try again
       showSnackbarWarning.value = true
     }
   }

@@ -1,6 +1,4 @@
 <template>
-  <!-- TEMPLATE CODE GOES HERE -->
-
   <v-tooltip text="Ditto">
     <template v-slot:activator="{ props }">
       <v-btn
@@ -29,8 +27,8 @@
 
   const store = useContextStore()
 
-  const pokemonsLocal = localStorage.getItem('pokemons') || '[]'
-  store.pokemons = JSON.parse(pokemonsLocal)
+  const pokemonsLocalStorage = localStorage.getItem('pokemons') || '[]'
+  store.pokemons = JSON.parse(pokemonsLocalStorage)
 
   const handleAddPokemon = () => {
     const pokemon: PokemonModel = {
