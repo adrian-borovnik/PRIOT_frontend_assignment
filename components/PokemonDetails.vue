@@ -1,10 +1,7 @@
 <template>
   <v-card class="pa-8">
     <p class="text-h3 mb-8 text-center">
-      {{
-        pokemon.name.toUpperCase()[0] +
-        pokemon.name.replace('-', ' ').substring(1)
-      }}
+      {{ pokemonName }}
     </p>
 
     <v-row class="d-flex justify-center">
@@ -73,5 +70,11 @@
 </template>
 
 <script setup lang="ts">
-  const { pokemon } = defineProps(['pokemon'])
+  const { pokemon } = defineProps(['pokemon']) // TODOO
+
+  const pokemonName = computed(
+    () =>
+      pokemon.name.toUpperCase()[0] +
+      pokemon.name.replace('-', ' ').substring(1)
+  )
 </script>

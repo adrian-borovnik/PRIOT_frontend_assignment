@@ -9,10 +9,7 @@
     <v-divider vertical class="mx-4"></v-divider>
     <v-sheet>
       <p class="text-h5 mb-6">
-        {{
-          pokemon.name.toUpperCase()[0] +
-          pokemon.name.replace('-', ' ').substring(1)
-        }}
+        {{ pokemonName }}
       </p>
       <div class="d-flex mt-2">
         <v-icon icon="mdi-heart" color="green mr-2"> </v-icon>
@@ -35,5 +32,13 @@
 </template>
 
 <script setup lang="ts">
-  defineProps(['pokemon'])
+  const { pokemon } = defineProps<{
+    pokemon: PokemonModel
+  }>()
+
+  const pokemonName = computed(
+    () =>
+      pokemon.name.toUpperCase()[0] +
+      pokemon.name.replace('-', ' ').substring(1)
+  )
 </script>

@@ -16,19 +16,10 @@
 
     <v-sheet class="d-flex align-center text-h6" width="100%">
       <p>
-        {{
-          pokemon.name.toUpperCase()[0] +
-          pokemon.name.replace('-', ' ').substring(1)
-        }}
+        {{ pokemonName }}
       </p>
       <v-spacer></v-spacer>
-      <v-tooltip
-        :text="`Delete ${
-          pokemon.name.toUpperCase()[0] +
-          pokemon.name.replace('-', ' ').substring(1)
-        }`"
-        location="top"
-      >
+      <v-tooltip :text="`Delete ${pokemonName}`" location="top">
         <template v-slot:activator="{ props }">
           <v-btn
             color="red"
@@ -48,7 +39,15 @@
 
   const store = useContextStore()
 
-  const { pokemon } = defineProps(['pokemon'])
+  const { pokemon } = defineProps<{
+    pokemon: PokemonModel
+  }>()
+
+  const pokemonName = computed(
+    () =>
+      pokemon.name.toUpperCase()[0] +
+      pokemon.name.replace('-', ' ').substring(1)
+  )
 
   const handleRemovePokemon = (id: number) => {
     store.removePokemon(id)
