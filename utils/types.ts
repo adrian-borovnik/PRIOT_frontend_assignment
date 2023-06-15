@@ -1,4 +1,5 @@
 type PokemonResponse = {
+  id: number
   name: string
   stats: {
     base_stat: number
@@ -28,3 +29,5 @@ type PokemonModel = {
   mainAbility: string
   img: string
 }
+
+type SnackbarType = 'success' | 'warning' | 'error'

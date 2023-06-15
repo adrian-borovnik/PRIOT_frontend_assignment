@@ -2,12 +2,11 @@
   <NuxtLink to="/pokemons">
     <v-btn flat prepend-icon="mdi-arrow-left" class="mb-4">Go back</v-btn>
   </NuxtLink>
+
+  <p v-if="pending">Loading...</p>
   <PokemonDetails :pokemon="pokemon" v-if="!error && !pending" />
   <div v-if="!pending && error">
-    <p>
-      {{ name.toUpperCase()[0] + name.replace('-', ' ').substring(1) }} was not
-      found...
-    </p>
+    <p>Pokemon was not found...</p>
     <NuxtLink to="/">
       <v-btn>Search</v-btn>
     </NuxtLink>

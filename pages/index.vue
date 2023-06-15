@@ -1,9 +1,13 @@
 <template>
-  <p v-if="fetchError && !loading">There was an error, search again...</p>
-
   <v-container fluid class="d-flex justify-center">
     <v-sheet width="100%" max-width="600">
-      <PokemonSearchCard :pokemon="pokemon" v-if="!fetchError && pokemon" />
+      <p v-if="loading">Loading...</p>
+      <p v-if="fetchError && !loading">There was an error, search again...</p>
+
+      <PokemonSearchCard
+        :pokemon="pokemon"
+        v-if="!fetchError && pokemon && !loading"
+      />
       <v-sheet class="d-flex justify-end pt-4">
         <v-btn
           @click="handleCatch"
@@ -20,8 +24,10 @@
   </v-container>
 
   <Snackbar
+    :message="snackbarMessage"
     :snackbar-type="snackbarType"
     :pokemon-name="currentPokemon"
+    :icon="snackbarIcon"
     v-model="showSnackbar"
   />
 </template>
@@ -34,12 +40,24 @@
   const pokemonsLocalStorage = localStorage.getItem('pokemons') || '[]'
   store.pokemons = JSON.parse(pokemonsLocalStorage)
 
-  const fetchError = ref(false)
-  const loading = ref(false)
+  const fetchError = ref<boolean>(false)
+  const loading = ref<boolean>(false)
 
-  const showSnackbar = ref(false)
-  // const snackbarType = ref<'success' | 'warning' | 'fail'>('fail')
-  let snackbarType: 'success' | 'warning' | 'fail' = 'success'
+  const showSnackbar = ref<boolean>(false)
+  const snackbarType = ref<SnackbarType>('success')
+  const snackbarMessage = ref<string>('')
+  const snackbarIcon = ref<string | undefined>()
+
+  const dispaySnackbar = (
+    message: string,
+    type: SnackbarType,
+    icon?: string
+  ) => {
+    snackbarType.value = type
+    snackbarMessage.value = message
+    showSnackbar.value = true
+    snackbarIcon.value = icon || undefined
+  }
 
   const pokemon = ref<PokemonModel>()
   const currentPokemon = ref('')
@@ -47,7 +65,7 @@
   const fetchData = async () => {
     loading.value = true
     try {
-      const id = Math.floor(Math.random() * 1000)
+      const id = Math.floor(Math.random() * 1000 + 1)
       const uri = `https://pokeapi.co/api/v2/pokemon/${id}`
       const res = await fetch(uri)
       const rawData: PokemonResponse = await res.json()
@@ -56,7 +74,7 @@
       fetchError.value = false
 
       const pokemonData: PokemonModel = {
-        id: Math.floor(Math.random() * 999999999),
+        id: rawData.id,
         name: rawData.name,
         stats: {
           hp: rawData.stats[0]?.base_stat,
@@ -78,6 +96,14 @@
   const handleCatch = async () => {
     if (pokemon.value === undefined) return
 
+    if (store.pokemons.find((p) => p.id === pokemon.value?.id)) {
+      dispaySnackbar(
+        'This pokemon is already in your collection... Search onwards!',
+        'warning'
+      )
+      return
+    }
+
     const chance = Math.random()
     const catchThreshold = 0.4
     const runawayThreshold = 0.8
@@ -88,16 +114,21 @@
 
     if (chance < catchThreshold) {
       store.addPokemon(pokemon.value)
-      snackbarType = 'success'
-      showSnackbar.value = true
+      dispaySnackbar('You caught a pokemon!', 'success', 'check-circle-outline')
       await fetchData()
     } else if (chance >= runawayThreshold) {
-      snackbarType = 'fail'
-      showSnackbar.value = true
+      dispaySnackbar(
+        'Your pokemon ran away...',
+        'error',
+        'close-octagon-outline'
+      )
       await fetchData()
     } else {
-      snackbarType = 'warning'
-      showSnackbar.value = true
+      dispaySnackbar(
+        'Pokemon escaped the pokeball. Try again!',
+        'warning',
+        'alert-outline'
+      )
     }
   }
 
