@@ -3,7 +3,7 @@
 
   <v-container fluid class="d-flex justify-center">
     <v-sheet width="100%" max-width="600">
-      <PokemonSearchCard :pokemon="pokemon" v-if="!fetchError" />
+      <PokemonSearchCard :pokemon="pokemon" v-if="!fetchError && pokemon" />
       <v-sheet class="d-flex justify-end pt-4">
         <v-btn
           @click="handleCatch"
@@ -19,38 +19,11 @@
     </v-sheet>
   </v-container>
 
-  <v-snackbar
-    v-model="showSnackbarSuccess"
-    :timeout="snackbarTimeout"
-    rounded="pill"
-    color="success"
-    class="text-center"
-  >
-    <v-icon class="mr-2">mdi-check-circle</v-icon>
-    You successfully caught {{ currentPokemon }}
-  </v-snackbar>
-
-  <v-snackbar
-    v-model="showSnackbarWarning"
-    :timeout="snackbarTimeout"
-    rounded="pill"
-    color="warning"
-    class="text-center"
-  >
-    <v-icon class="mr-2">mdi-alert</v-icon>
-    {{ currentPokemon }} escaped the pokeball. Try again!
-  </v-snackbar>
-
-  <v-snackbar
-    v-model="showSnackbarError"
-    :timeout="snackbarTimeout"
-    rounded="pill"
-    color="red"
-    class="text-center"
-  >
-    <v-icon class="mr-2">mdi-close-octagon-outline</v-icon>
-    {{ currentPokemon }} ran away...
-  </v-snackbar>
+  <Snackbar
+    :snackbar-type="snackbarType"
+    :pokemon-name="currentPokemon"
+    v-model="showSnackbar"
+  />
 </template>
 
 <script setup lang="ts">
@@ -64,13 +37,12 @@
   const fetchError = ref(false)
   const loading = ref(false)
 
-  const showSnackbarSuccess = ref(false)
-  const showSnackbarWarning = ref(false)
-  const showSnackbarError = ref(false)
-  const snackbarTimeout = ref(2000)
-  const currentPokemon = ref('')
+  const showSnackbar = ref(false)
+  // const snackbarType = ref<'success' | 'warning' | 'fail'>('fail')
+  let snackbarType: 'success' | 'warning' | 'fail' = 'success'
 
-  const pokemon = ref({} as PokemonModel)
+  const pokemon = ref<PokemonModel>()
+  const currentPokemon = ref('')
 
   const fetchData = async () => {
     loading.value = true
@@ -104,6 +76,8 @@
   }
 
   const handleCatch = async () => {
+    if (pokemon.value === undefined) return
+
     const chance = Math.random()
     const catchThreshold = 0.4
     const runawayThreshold = 0.8
@@ -114,15 +88,20 @@
 
     if (chance < catchThreshold) {
       store.addPokemon(pokemon.value)
-      showSnackbarSuccess.value = true
+      snackbarType = 'success'
+      showSnackbar.value = true
       await fetchData()
     } else if (chance >= runawayThreshold) {
-      showSnackbarError.value = true
+      snackbarType = 'fail'
+      showSnackbar.value = true
       await fetchData()
     } else {
-      showSnackbarWarning.value = true
+      snackbarType = 'warning'
+      showSnackbar.value = true
     }
   }
 
-  await fetchData()
+  onMounted(async () => {
+    await fetchData()
+  })
 </script>
